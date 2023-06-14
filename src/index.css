@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap");
 
 html,
 body,
@@ -7,7 +9,7 @@ body,
 .content {
   height: 100%;
   width: 100%;
-  font-family: 'Source Sans 3', sans-serif;
+  font-family: "Source Sans 3", sans-serif;
 }
 
 .app {
@@ -17,7 +19,6 @@ body,
 
 ::-webkit-scrollbar {
   width: 10px;
-
 }
 
 /* Track */
@@ -34,4 +35,3 @@ body,
 ::-webkit-scrollbar-track:hover {
   background: #555;
 }
-
