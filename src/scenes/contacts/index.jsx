@@ -49,7 +49,6 @@ const Contacts = () => {
       const response = await fetch("/api/adminData"); //4000 is the port that server is listening to
 
       const json = await response.json(); //parsed into an array of objects
-      console.log("Hell0:", json);
 
       //check if response if ok (data get back successfully)
       if (response.ok) {
