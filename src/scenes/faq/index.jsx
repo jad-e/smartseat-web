@@ -1,7 +1,7 @@
 import { Box, Button, TextField, useTheme, Typography } from "@mui/material";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -26,10 +26,6 @@ const FAQ = () => {
   const colors = tokens(theme.palette.mode);
 
   const { customization, dispatch } = useCustomizationContext();
-
-  //states
-  const [edit, setEdit] = useState(true); //originally null
-  const [changeMade, setChangeMade] = useState(false);
 
   useEffect(() => {
     const fetchCustomizations = async () => {
@@ -71,8 +67,7 @@ const FAQ = () => {
 
   //try to edit the selected customization in db
   const handleEditFormSubmit = async (values) => {
-    //make an student object
-
+    //make a customization object
     const customization = {
       revCheckInTimeLimit: values.revCheckInTimeLimit,
 
@@ -80,25 +75,36 @@ const FAQ = () => {
       shortBreakUsageAmount: values.shortBreakUsageAmount,
 
       lunchBreakTimeLimit: values.lunchBreakTimeLimit,
-      lunchBreakStartTime: values.lunchBreakStartTime,
-      lunchBreakEndTime: values.lunchBreakEndTime,
+      lunchBreakStartTime: moment(values.lunchBreakStartTime.toString()).format(
+        "HH:mm"
+      ),
+      lunchBreakEndTime: moment(values.lunchBreakEndTime.toString()).format(
+        "HH:mm"
+      ),
       lunchBreakUsageAmount: values.lunchBreakUsageAmount,
 
       dinnerBreakTimeLimit: values.dinnerBreakTimeLimit,
-      dinnerBreakStartTime: values.dinnerBreakStartTime,
-      dinnerBreakEndTime: values.dinnerBreakEndTime,
+      dinnerBreakStartTime: moment(
+        values.dinnerBreakStartTime.toString()
+      ).format("HH:mm"),
+      dinnerBreakEndTime: moment(values.dinnerBreakEndTime.toString()).format(
+        "HH:mm"
+      ),
       dinnerBreakUsageAmount: values.dinnerBreakUsageAmount,
 
       reservationDisabled: values.reservationDisabled,
     };
 
-    const response = await fetch("/api/customization/" + edit._id, {
-      method: "PATCH",
-      body: JSON.stringify(customization), //changes the object into a json string
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "/api/customization/648d897e2c51433d55f5e747",
+      {
+        method: "PATCH",
+        body: JSON.stringify(customization), //changes the object into a json string
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const json = await response.json();
 
@@ -107,9 +113,6 @@ const FAQ = () => {
     }
 
     if (response.ok) {
-      //clear state
-      setEdit(null);
-
       alert("Changes applied succesfully.");
       dispatch({ type: "EDIT_CUSTOMIZATION", payload: json });
     }
@@ -126,19 +129,29 @@ const FAQ = () => {
 
       {/* editable form */}
 
-      {edit && (
+      {customization && (
         <Formik
           initialValues={{
-            revCheckInTimeLimit: edit.revCheckInTimeLimit,
-            shortBreakTimeLimit: edit.shortBreakTimeLimit,
-            shortBreakUsageAmount: edit.shortBreakUsageAmount,
-            lunchBreakTimeLimit: edit.lunchBreakTimeLimit,
-            lunchBreakStartTime: edit.lunchBreakStartTime,
-            lunchBreakUsageAmount: edit.lunchBreakUsageAmount,
-            dinnerBreakTimeLimit: edit.dinnerBreakTimeLimit,
-            dinnerBreakStartTime: edit.dinnerBreakStartTime,
-            dinnerBreakUsageAmount: edit.dinnerBreakUsageAmount,
-            reservationDisabled: edit.reservationDisabled,
+            revCheckInTimeLimit: customization[0].revCheckInTimeLimit,
+            shortBreakTimeLimit: customization[0].shortBreakTimeLimit,
+            shortBreakUsageAmount: customization[0].shortBreakUsageAmount,
+            lunchBreakTimeLimit: customization[0].lunchBreakTimeLimit,
+            lunchBreakStartTime: dayjs(
+              "2023-06-17T" + customization[0].lunchBreakStartTime
+            ), //THIS
+            lunchBreakEndTime: dayjs(
+              "2023-06-17T" + customization[0].lunchBreakEndTime
+            ), //THIS
+            lunchBreakUsageAmount: customization[0].lunchBreakUsageAmount,
+            dinnerBreakTimeLimit: customization[0].dinnerBreakTimeLimit,
+            dinnerBreakStartTime: dayjs(
+              "2023-06-17T" + customization[0].dinnerBreakStartTime
+            ), //THIS
+            dinnerBreakEndTime: dayjs(
+              "2023-06-17T" + customization[0].dinnerBreakEndTime
+            ), //THIS
+            dinnerBreakUsageAmount: customization[0].dinnerBreakUsageAmount,
+            reservationDisabled: customization[0].reservationDisabled,
           }}
           onSubmit={handleEditFormSubmit}
           validationSchema={editCheckoutSchema}
@@ -377,7 +390,7 @@ const FAQ = () => {
                           variant="filled"
                           type="number"
                           inputProps={{ min: 0 }}
-                          label="Minute(s)"
+                          label="Usage Amount"
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.shortBreakUsageAmount}
@@ -492,7 +505,7 @@ const FAQ = () => {
                             id="lunchBreakStartTime"
                             name="lunchBreakStartTime"
                             views={["hours", "minutes"]}
-                            inputFormat="hh:mm"
+                            inputFormat="HH:mm"
                             value={values.lunchBreakStartTime}
                             onChange={(value) => {
                               setFieldValue("lunchBreakStartTime", value);
@@ -516,7 +529,7 @@ const FAQ = () => {
                                 }
                                 inputProps={{
                                   ...params.inputProps,
-                                  placeholder: "hh:mm",
+                                  placeholder: "HH:mm",
                                 }}
                               />
                             )}
@@ -531,7 +544,7 @@ const FAQ = () => {
                             id="lunchBreakEndTime"
                             name="lunchBreakEndTime"
                             views={["hours", "minutes"]}
-                            inputFormat="hh:mm"
+                            inputFormat="HH:mm"
                             value={values.lunchBreakEndTime}
                             onChange={(value) => {
                               setFieldValue("lunchBreakEndTime", value);
@@ -555,7 +568,7 @@ const FAQ = () => {
                                 }
                                 inputProps={{
                                   ...params.inputProps,
-                                  placeholder: "hh:mm",
+                                  placeholder: "HH:mm",
                                 }}
                               />
                             )}
@@ -603,7 +616,7 @@ const FAQ = () => {
                           variant="filled"
                           type="number"
                           inputProps={{ min: 0 }}
-                          label="Minute(s)"
+                          label="Usage Amount"
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.lunchBreakUsageAmount}
@@ -717,7 +730,7 @@ const FAQ = () => {
                             id="dinnerBreakStartTime"
                             name="dinnerBreakStartTime"
                             views={["hours", "minutes"]}
-                            inputFormat="hh:mm"
+                            inputFormat="HH:mm"
                             value={values.dinnerBreakStartTime}
                             onChange={(value) => {
                               setFieldValue("dinnerBreakStartTime", value);
@@ -741,7 +754,7 @@ const FAQ = () => {
                                 }
                                 inputProps={{
                                   ...params.inputProps,
-                                  placeholder: "hh:mm",
+                                  placeholder: "HH:mm",
                                 }}
                               />
                             )}
@@ -756,7 +769,7 @@ const FAQ = () => {
                             id="dinnerBreakEndTime"
                             name="dinnerBreakEndTime"
                             views={["hours", "minutes"]}
-                            inputFormat="hh:mm"
+                            inputFormat="HH:mm"
                             value={values.dinnerBreakEndTime}
                             onChange={(value) => {
                               setFieldValue("dinnerBreakEndTime", value);
@@ -780,7 +793,7 @@ const FAQ = () => {
                                 }
                                 inputProps={{
                                   ...params.inputProps,
-                                  placeholder: "hh:mm",
+                                  placeholder: "HH:mm",
                                 }}
                               />
                             )}
@@ -814,8 +827,8 @@ const FAQ = () => {
                           Usage Amount
                         </Typography>
                         <Typography variant="h6">
-                          The number of times the lunch break option can be used
-                          during dinner period.
+                          The number of times the dinner break option can be
+                          used during dinner period.
                         </Typography>
                       </div>
                       <div
@@ -828,7 +841,7 @@ const FAQ = () => {
                           variant="filled"
                           type="number"
                           inputProps={{ min: 0 }}
-                          label="Minute(s)"
+                          label="Usage Amount"
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.dinnerBreakUsageAmount}
@@ -893,25 +906,32 @@ const FAQ = () => {
                   </div>
 
                   <div style={{ alignSelf: "center", marginRight: 15 }}>
-                    <ColorSwitch checked={false} />
+                    <ColorSwitch
+                      id="reservationDisabled"
+                      name="reservationDisabled"
+                      checked={values.reservationDisabled}
+                      value={values.reservationDisabled}
+                      onChange={handleChange}
+                    />
                   </div>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    marginTop: 50,
+                  }}
+                >
+                  <SaveButton type="submit" variant="contained">
+                    Save Changes
+                  </SaveButton>
                 </div>
               </div>
             </form>
           )}
         </Formik>
       )}
-
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          marginTop: 50,
-        }}
-      >
-        <SaveButton variant="contained">Save Changes</SaveButton>
-      </div>
       <div style={{ height: 50 }}></div>
     </Box>
   );
@@ -921,12 +941,12 @@ const editCheckoutSchema = yup.object().shape({
   revCheckInTimeLimit: yup
     .number()
     .typeError("Invalid check-in time limit.")
-    .min(0, "Check-in time limit cannot be less than 0 min.")
+    .min(0, "Check-in time limit cannot be less than 0 minutes.")
     .required("Check-in time limit is required."),
   shortBreakTimeLimit: yup
     .number()
     .typeError("Invalid short break time limit.")
-    .min(0, "Short break time limit cannot be less than 0 min.")
+    .min(0, "Short break time limit cannot be less than 0 minutes.")
     .required("Short break time limit is required."),
   shortBreakUsageAmount: yup
     .number()
@@ -936,7 +956,7 @@ const editCheckoutSchema = yup.object().shape({
   lunchBreakTimeLimit: yup
     .number()
     .typeError("Invalid lunch break time limit.")
-    .min(0, "Lunch break time limit cannot be less than 0 min.")
+    .min(0, "Lunch break time limit cannot be less than 0 minutes.")
     .required("Lunch break time limit is required."),
   lunchBreakStartTime: yup
     .date()
@@ -954,7 +974,7 @@ const editCheckoutSchema = yup.object().shape({
   dinnerBreakTimeLimit: yup
     .number()
     .typeError("Invalid dinner break time limit.")
-    .min(0, "Dinner break time limit cannot be less than 0 min.")
+    .min(0, "Dinner break time limit cannot be less than 0 minutes.")
     .required("Dinner break time limit is required."),
   dinnerBreakStartTime: yup
     .date()
@@ -970,7 +990,7 @@ const editCheckoutSchema = yup.object().shape({
     .min(0, "Dinner break usage amount cannot be less than 0.")
     .required("Dinner break usage amount is required."),
   reservationDisabled: yup
-    .number()
+    .bool()
     .typeError("Invalid reservation state.")
     .required("Reservation state is required."),
 });
