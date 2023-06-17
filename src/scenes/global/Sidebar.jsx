@@ -7,7 +7,7 @@ import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import TopicIcon from "@mui/icons-material/Topic";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
@@ -149,9 +149,9 @@ const Sidebar = () => {
             />
 
             <Item
-              title="Libraries"
+              title="Other Data"
               to="/invoices"
-              icon={<AccountBalanceIcon />}
+              icon={<TopicIcon />}
               selected={selected}
               setSelected={setSelected}
             />
