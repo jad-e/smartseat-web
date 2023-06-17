@@ -101,7 +101,6 @@ const Contacts = () => {
       phoneNumber: values.phoneNumber,
       email: values.email,
     };
-
     const response = await fetch("/api/adminData/" + edit._id, {
       method: "PATCH",
       body: JSON.stringify(admin), //changes the object into a json string
@@ -109,23 +108,18 @@ const Contacts = () => {
         "Content-Type": "application/json",
       },
     });
-
     const json = await response.json();
-
     if (!response.ok) {
       alert(json.error);
     }
-
     if (response.ok) {
       //clear form
       resetForm();
-
       //clear state
       setEdit(null);
       setRowSelectionModel([]);
       setEditBtnDisabled(true);
       setDeleteBtnDisabled(true);
-
       alert("Admin details edited successfully.");
       dispatch({ type: "EDIT_ADMIN", payload: json });
     }
@@ -508,7 +502,9 @@ const Contacts = () => {
                         type="submit"
                         color="secondary"
                         variant="contained"
-                        onClick={() => setEditDialogOpen(false)}
+                        onClick={() => {
+                          setEditDialogOpen(false);
+                        }}
                       >
                         Edit
                       </Button>

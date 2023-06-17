@@ -17,6 +17,14 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 
+import MenuItem from "@mui/material/MenuItem";
+
+import moment from "moment";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
@@ -69,7 +77,7 @@ const Team = () => {
       email: values.email,
       phoneNumber: values.phoneNumber,
       gender: values.gender,
-      birthday: values.birthday,
+      birthday: moment(values.birthday.toString()).format("MM/DD/YYYY"),
       school: values.school,
     };
 
@@ -104,9 +112,9 @@ const Team = () => {
       email: values.email,
       phoneNumber: values.phoneNumber,
       gender: values.gender,
-      birthday: values.birthday,
+      birthday: moment(values.birthday.toString()).format("MM/DD/YYYY"),
       school: values.school,
-      violationNum: values.violationNum,
+      violateNum: values.violateNum,
       blacklistNum: values.blacklistNum,
       authStat: values.authStat,
     };
@@ -372,6 +380,7 @@ const Team = () => {
             handleBlur,
             handleChange,
             handleSubmit,
+            setFieldValue,
           }) => (
             <form onSubmit={handleSubmit}>
               <Box
@@ -447,8 +456,10 @@ const Team = () => {
                   helperText={touched.phoneNumber && errors.phoneNumber}
                   sx={{ gridColumn: "span 4" }}
                 />
+
                 <TextField
                   fullWidth
+                  select
                   variant="filled"
                   type="text"
                   label="Gender"
@@ -459,22 +470,58 @@ const Team = () => {
                   error={!!touched.gender && !!errors.gender}
                   helperText={touched.gender && errors.gender}
                   sx={{ gridColumn: "span 2" }}
-                />
+                >
+                  <MenuItem value={"Female"}>Female</MenuItem>
+                  <MenuItem value={"Male"}>Male</MenuItem>
+                  <MenuItem value={"Transgender Female"}>
+                    Transgender Female
+                  </MenuItem>
+                  <MenuItem value={"Transgender Male"}>
+                    Transgender Male
+                  </MenuItem>
+                  <MenuItem value={"Gender Variant/Non-Conforming"}>
+                    Gender Variant/Non-Conforming
+                  </MenuItem>
+                  <MenuItem value={"Prefer Not to Say"}>
+                    Prefer Not to Say
+                  </MenuItem>
+                </TextField>
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Birthday"
+                    id="birthday"
+                    name="birthday"
+                    views={["day", "month", "year"]}
+                    disableFuture
+                    inputFormat="MM/DD/YYYY"
+                    value={values.birthday}
+                    onChange={(value) => {
+                      setFieldValue("birthday", value);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        variant="filled"
+                        type="date"
+                        label="Birthday"
+                        onBlur={handleBlur}
+                        name="birthday"
+                        error={!!touched.birthday && !!errors.birthday}
+                        helperText={touched.birthday && errors.birthday}
+                        sx={{ gridColumn: "span 2" }}
+                        inputProps={{
+                          ...params.inputProps,
+                          placeholder: "MM/DD/YYYY",
+                        }}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
                 <TextField
                   fullWidth
-                  variant="filled"
-                  type="text"
-                  label="Birthday"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.birthday}
-                  name="birthday"
-                  error={!!touched.birthday && !!errors.birthday}
-                  helperText={touched.birthday && errors.birthday}
-                  sx={{ gridColumn: "span 2" }}
-                />
-                <TextField
-                  fullWidth
+                  select
                   variant="filled"
                   type="text"
                   label="School"
@@ -485,7 +532,42 @@ const Team = () => {
                   error={!!touched.school && !!errors.school}
                   helperText={touched.school && errors.school}
                   sx={{ gridColumn: "span 4" }}
-                />
+                >
+                  <MenuItem value={"BACFIN"}>
+                    BACFIN - Bachelor of Arts (Hons) Accounting and Finance 3+0
+                    in Collaboration with University of Hertfordshire, UK
+                  </MenuItem>
+                  <MenuItem value={"BBDUH"}>
+                    BBDUH - Bachelor of Arts (Hons) Business Administration 3+0
+                    in Collaboration with University of Hertfordshire, UK
+                  </MenuItem>
+                  <MenuItem value={"BBSUT"}>
+                    BBSUT - Bachelor of Business 3+0 in Collaboration with
+                    Swinburne University of Technology, Australia
+                  </MenuItem>
+                  <MenuItem value={"BCSCU"}>
+                    BCSCU - Bachelor of Science (Hons) in Computer Science 3+0
+                    in Collaboration with Coventry University, UK
+                  </MenuItem>
+                  <MenuItem value={"BCTCU"}>
+                    BCTCU - Bachelor of Science (Hons) in Computing 3+0 in
+                    Collaboration with Coventry University, UK
+                  </MenuItem>
+                  <MenuItem value={"BEECU"}>
+                    BEECU - Bachelor of Engineering (Hons) in Electrical and
+                    Electronics Engineering 3+0 in Collaboration with Coventry
+                    University, UK
+                  </MenuItem>
+                  <MenuItem value={"BMCUH"}>
+                    BMCUH - Bachelor of Arts (Hons) Mass Communications 3+0 in
+                    Collaboration with University of Hertfordshire, UK
+                  </MenuItem>
+                  <MenuItem value={"BMECU"}>
+                    BMECU - Bachelor of Engineering (Hons) in Mechanical
+                    Engineering 3+0 in Collaboration with Coventry University,
+                    UK
+                  </MenuItem>
+                </TextField>
               </Box>
               <Box
                 display="flex"
@@ -529,7 +611,7 @@ const Team = () => {
                   email: edit.email,
                   phoneNumber: edit.phoneNumber,
                   gender: edit.gender,
-                  birthday: edit.birthday,
+                  birthday: dayjs(edit.birthday),
                   school: edit.school,
                   violateNum: edit.violateNum,
                   blacklistNum: edit.blacklistNum,
@@ -545,6 +627,7 @@ const Team = () => {
                   handleBlur,
                   handleChange,
                   handleSubmit,
+                  setFieldValue,
                 }) => (
                   <form onSubmit={handleSubmit}>
                     <Box
@@ -596,8 +679,10 @@ const Team = () => {
                         helperText={touched.phoneNumber && errors.phoneNumber}
                         sx={{ gridColumn: "span 4" }}
                       />
+
                       <TextField
                         fullWidth
+                        select
                         variant="filled"
                         type="text"
                         label="Gender"
@@ -608,22 +693,58 @@ const Team = () => {
                         error={!!touched.gender && !!errors.gender}
                         helperText={touched.gender && errors.gender}
                         sx={{ gridColumn: "span 2" }}
-                      />
+                      >
+                        <MenuItem value={"Female"}>Female</MenuItem>
+                        <MenuItem value={"Male"}>Male</MenuItem>
+                        <MenuItem value={"Transgender Female"}>
+                          Transgender Female
+                        </MenuItem>
+                        <MenuItem value={"Transgender Male"}>
+                          Transgender Male
+                        </MenuItem>
+                        <MenuItem value={"Gender Variant/Non-Conforming"}>
+                          Gender Variant/Non-Conforming
+                        </MenuItem>
+                        <MenuItem value={"Prefer Not to Say"}>
+                          Prefer Not to Say
+                        </MenuItem>
+                      </TextField>
+
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Birthday"
+                          id="birthday"
+                          name="birthday"
+                          views={["day", "month", "year"]}
+                          disableFuture
+                          inputFormat="MM/DD/YYYY"
+                          value={values.birthday}
+                          onChange={(value) => {
+                            setFieldValue("birthday", value);
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              variant="filled"
+                              type="date"
+                              label="Birthday"
+                              onBlur={handleBlur}
+                              name="birthday"
+                              error={!!touched.birthday && !!errors.birthday}
+                              helperText={touched.birthday && errors.birthday}
+                              sx={{ gridColumn: "span 2" }}
+                              inputProps={{
+                                ...params.inputProps,
+                                placeholder: "MM/DD/YYYY",
+                              }}
+                            />
+                          )}
+                        />
+                      </LocalizationProvider>
                       <TextField
                         fullWidth
-                        variant="filled"
-                        type="text"
-                        label="Birthday"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.birthday}
-                        name="birthday"
-                        error={!!touched.birthday && !!errors.birthday}
-                        helperText={touched.birthday && errors.birthday}
-                        sx={{ gridColumn: "span 2" }}
-                      />
-                      <TextField
-                        fullWidth
+                        select
                         variant="filled"
                         type="text"
                         label="School"
@@ -634,11 +755,50 @@ const Team = () => {
                         error={!!touched.school && !!errors.school}
                         helperText={touched.school && errors.school}
                         sx={{ gridColumn: "span 4" }}
-                      />
+                      >
+                        <MenuItem value={"BACFIN"}>
+                          BACFIN - Bachelor of Arts (Hons) Accounting and
+                          Finance 3+0 in Collaboration with University of
+                          Hertfordshire, UK
+                        </MenuItem>
+                        <MenuItem value={"BBDUH"}>
+                          BBDUH - Bachelor of Arts (Hons) Business
+                          Administration 3+0 in Collaboration with University of
+                          Hertfordshire, UK
+                        </MenuItem>
+                        <MenuItem value={"BBSUT"}>
+                          BBSUT - Bachelor of Business 3+0 in Collaboration with
+                          Swinburne University of Technology, Australia
+                        </MenuItem>
+                        <MenuItem value={"BCSCU"}>
+                          BCSCU - Bachelor of Science (Hons) in Computer Science
+                          3+0 in Collaboration with Coventry University, UK
+                        </MenuItem>
+                        <MenuItem value={"BCTCU"}>
+                          BCTCU - Bachelor of Science (Hons) in Computing 3+0 in
+                          Collaboration with Coventry University, UK
+                        </MenuItem>
+                        <MenuItem value={"BEECU"}>
+                          BEECU - Bachelor of Engineering (Hons) in Electrical
+                          and Electronics Engineering 3+0 in Collaboration with
+                          Coventry University, UK
+                        </MenuItem>
+                        <MenuItem value={"BMCUH"}>
+                          BMCUH - Bachelor of Arts (Hons) Mass Communications
+                          3+0 in Collaboration with University of Hertfordshire,
+                          UK
+                        </MenuItem>
+                        <MenuItem value={"BMECU"}>
+                          BMECU - Bachelor of Engineering (Hons) in Mechanical
+                          Engineering 3+0 in Collaboration with Coventry
+                          University, UK
+                        </MenuItem>
+                      </TextField>
                       <TextField
                         fullWidth
                         variant="filled"
-                        type="text"
+                        type="number"
+                        inputProps={{ min: 0 }}
                         label="No. of Violations"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -651,7 +811,8 @@ const Team = () => {
                       <TextField
                         fullWidth
                         variant="filled"
-                        type="text"
+                        type="number"
+                        inputProps={{ min: 0 }}
                         label="No. of Blacklists"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -663,6 +824,7 @@ const Team = () => {
                       />
                       <TextField
                         fullWidth
+                        select
                         variant="filled"
                         type="text"
                         label="Auth State"
@@ -673,14 +835,19 @@ const Team = () => {
                         error={!!touched.authStat && !!errors.authStat}
                         helperText={touched.authStat && errors.authStat}
                         sx={{ gridColumn: "span 4" }}
-                      />
+                      >
+                        <MenuItem value={"Authorized"}>Authorized</MenuItem>
+                        <MenuItem value={"Blacklisted"}>Blacklisted</MenuItem>
+                      </TextField>
                     </Box>
                     <Box display="flex" justifyContent="end" mt="20px">
                       <Button
                         type="submit"
                         color="secondary"
                         variant="contained"
-                        onClick={() => setEditDialogOpen(false)}
+                        onClick={() => {
+                          setEditDialogOpen(false);
+                        }}
                       >
                         Edit
                       </Button>
@@ -754,7 +921,11 @@ const checkoutSchema = yup.object().shape({
       "Password must be at least 8 characters long and should include a combination of uppercase and lowercase letters, numbers, and special characters."
     ),
   gender: yup.string().required("Gender is required."),
-  birthday: yup.string().required("Birthday is required."),
+  birthday: yup
+    .date()
+    .typeError("Invalid date.")
+    .max(new Date(), "DOB cannot be greater than today's date.")
+    .required("Birthday is required."),
   school: yup.string().required("School is required."),
 });
 
@@ -772,10 +943,22 @@ const editCheckoutSchema = yup.object().shape({
     .matches(phoneRegExp, "Invalid phone number.")
     .required("Phone number is required."),
   gender: yup.string().required("Gender is required."),
-  birthday: yup.string().required("Birthday is required."),
+  birthday: yup
+    .date()
+    .typeError("Invalid date.")
+    .max(new Date(), "DOB cannot be greater than today's date.")
+    .required("Birthday is required."),
   school: yup.string().required("School is required."),
-  reserveNum: yup.number().required("No. of violations is required."),
-  blacklistNum: yup.number().required("No. of blacklists is required."),
+  violateNum: yup
+    .number()
+    .typeError("Invalid violation number.")
+    .min(0, "No. of violations cannot be less than 0.")
+    .required("No. of violations is required."),
+  blacklistNum: yup
+    .number()
+    .typeError("Invalid blacklist number.")
+    .min(0, "No. of blacklists cannot be less than 0.")
+    .required("No. of blacklists is required."),
   authStat: yup.string().required("Auth state is required."),
 });
 
@@ -786,7 +969,7 @@ const initialValues = {
   email: "",
   phoneNumber: "",
   gender: "",
-  birthday: "",
+  birthday: null,
   school: "",
 };
 

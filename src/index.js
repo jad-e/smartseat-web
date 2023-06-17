@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AdminAuthContextProvider } from "./context/AdminAuthContext";
 import { AdminDataContextProvider } from "./context/AdminDataContext";
 import { StudentDataContextProvider } from "./context/StudentDataContext";
+import { CustomizationContextProvider } from "./context/CustomizationContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,9 +14,11 @@ root.render(
     <AdminAuthContextProvider>
       <AdminDataContextProvider>
         <StudentDataContextProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <CustomizationContextProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </CustomizationContextProvider>
         </StudentDataContextProvider>
       </AdminDataContextProvider>
     </AdminAuthContextProvider>
