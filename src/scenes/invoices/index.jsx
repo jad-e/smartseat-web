@@ -1,8 +1,38 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Box, Typography, Button, TextField, useTheme } from "@mui/material";
+import { Formik } from "formik";
+import * as yup from "yup";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import { tokens } from "../../theme";
 import { mockDataInvoices } from "../../data/mockData";
 import Header from "../../components/Header";
+import { useEffect, useState } from "react";
+
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarExport,
+  GridToolbarDensitySelector,
+} from "@mui/x-data-grid";
+
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+
+import MenuItem from "@mui/material/MenuItem";
+
+//icons
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+
+//context
+//reservation context
+//violation records context
+//assistance records context
 
 const Invoices = () => {
   const theme = useTheme();
@@ -46,7 +76,7 @@ const Invoices = () => {
     <Box m="20px">
       <Header
         title="OTHER DATA"
-        subtitle="Seat reservation records, violation records, blacklist records, and more"
+        subtitle="Seat Reservation Records, Violation Records, and More"
       />
       <Box
         m="40px 0 0 0"
