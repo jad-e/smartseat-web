@@ -37,6 +37,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 // context
 import { useStudentDataContext } from "../../hooks/useStudentDataContext";
+import { useAdminAuthContext } from "../../hooks/useAdminAuthContext";
 
 const Team = () => {
   const theme = useTheme();
