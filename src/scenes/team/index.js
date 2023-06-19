@@ -44,6 +44,7 @@ const Team = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const { studentData, dispatch } = useStudentDataContext();
+  const { adminUser } = useAdminAuthContext();
 
   const [editBtnDisabled, setEditBtnDisabled] = useState(true);
   const [deleteBtnDisabled, setDeleteBtnDisabled] = useState(true);
@@ -54,7 +55,11 @@ const Team = () => {
 
   useEffect(() => {
     const fetchStudents = async () => {
-      const response = await fetch("/api/studentData"); //4000 is the port that server is listening to
+      const response = await fetch("/api/studentData", {
+        headers: {
+          Authorization: `Bearer ${adminUser.token}`,
+        },
+      }); //4000 is the port that server is listening to
 
       const json = await response.json(); //parsed into an array of objects
 
@@ -86,6 +91,7 @@ const Team = () => {
       body: JSON.stringify(student), //changes the object into a json string
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${adminUser.token}`,
       },
     });
 
@@ -124,6 +130,7 @@ const Team = () => {
       body: JSON.stringify(student), //changes the object into a json string
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${adminUser.token}`,
       },
     });
 
@@ -159,6 +166,7 @@ const Team = () => {
       body: JSON.stringify(toBeDeleted), //changes the object into a json string
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${adminUser.token}`,
       },
     });
 
