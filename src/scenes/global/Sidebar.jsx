@@ -165,9 +165,9 @@ const Sidebar = () => {
             </Typography>
 
             <Item
-              title="Enroll"
-              to="/form"
-              icon={<PersonOutlinedIcon />}
+              title="Library"
+              to="/geography"
+              icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -176,14 +176,6 @@ const Sidebar = () => {
               title="Customizations"
               to="/faq"
               icon={<HelpOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Item
-              title="Update Floor Plan"
-              to="/geography"
-              icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />

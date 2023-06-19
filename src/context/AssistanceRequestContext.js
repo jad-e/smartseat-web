@@ -24,12 +24,12 @@ export const assistanceRequestReducer = (state, action) => {
 };
 
 export const AssistanceRequestContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(assistanceRequestReducer, {
+  const [state, dispatchA] = useReducer(assistanceRequestReducer, {
     assistanceRequest: null,
   });
 
   return (
-    <AssistanceRequestContext.Provider value={{ ...state, dispatch }}>
+    <AssistanceRequestContext.Provider value={{ ...state, dispatchA }}>
       {children}
     </AssistanceRequestContext.Provider>
   );

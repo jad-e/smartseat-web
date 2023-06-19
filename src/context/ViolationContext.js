@@ -24,12 +24,12 @@ export const violationReducer = (state, action) => {
 };
 
 export const ViolationContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(violationReducer, {
+  const [state, dispatchV] = useReducer(violationReducer, {
     violation: null,
   });
 
   return (
-    <ViolationContext.Provider value={{ ...state, dispatch }}>
+    <ViolationContext.Provider value={{ ...state, dispatchV }}>
       {children}
     </ViolationContext.Provider>
   );
